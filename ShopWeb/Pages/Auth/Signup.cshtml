@@ -1,0 +1,41 @@
+﻿@page
+@model ShopWeb.Pages.Auth.SignupModel
+@{
+}
+
+<h1 align="center">Sign Up</h1>
+@if (Model.Message != null || !Html.ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger" asp-validation-summary="All" role="alert">
+        <strong>@Model.Message</strong>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+             class="bi bi-x-lg" viewBox="0 0 16 16" data-dismiss="alert" style="float:right" cursor="pointer">
+            <path d="M1.293 1.293a1 1 0 0 1 1.414 0L8 6.586l5.293-5.293a1 1 0 1 1 1.414 1.414L9.414 8l5.293 5.293a1 1 0 0 1-1.414 1.414L8 9.414l-5.293 5.293a1 1 0 0 1-1.414-1.414L6.586 8 1.293 2.707a1 1 0 0 1 0-1.414z" />
+        </svg>
+    </div>
+}
+
+<form method="post" class="container col-5">
+    <div class="form-group">
+        <label asp-for="newUser.Email" class="control-label"></label>
+        <input asp-for="newUser.Email" type="email" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Password1" class="control-label">Password</label>
+        <input asp-for="Password1" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Password2" class="control-label">Confirm Password</label>
+        <input asp-for="Password2" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="newUser.ContactNumber" class="control-label"></label>
+        <input asp-for="newUser.ContactNumber" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="newUser.Address" class="control-label"></label>
+        <input asp-for="newUser.Address" class="form-control" />
+    </div>
+    <button class="btn btn-primary" type="submit">Sign Up</button>|
+    <a asp-page="/Index" class="btn-link">Return Home</a>
+</form>

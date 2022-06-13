@@ -1,0 +1,64 @@
+﻿@page
+@model ShopWeb.Pages.Products.CreateModel
+@{
+    ViewData["Title"] = "Create";
+}
+@using ShopWeb.Models 
+
+<h1 align="center">Add Products</h1>
+<hr />
+<div class="row">
+    <div class="container col-md-8">
+        <form method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Product.Name" class="control-label"></label>
+                <input asp-for="Product.Name" class="form-control" />
+                <span asp-validation-for="Product.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Product.Price" class="control-label"></label>
+                <input asp-for="Product.Price" class="form-control" />
+                <span asp-validation-for="Product.Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label for="photoInput" class="control-label">Picture</label>
+                <div class="custom-file" id="photoInput">
+                    <input class="custom-file-input form-control" asp-for="Photo" id="file-upload" style="cursor:pointer" />
+                    <label class="custom-file-label" id="file-name" style="cursor:pointer">Click here to add a picture</label>
+                </div>
+                <span asp-validation-for="Photo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Product.StockQuantity" class="control-label"></label>
+                <input asp-for="Product.StockQuantity" class="form-control" />
+                <span asp-validation-for="Product.StockQuantity" class="text-danger"></span>
+            </div>
+            <div class="form-group dropdown">
+                Select a category:
+                <select class="form-select form-control" asp-for="Product.CategoryID">
+                    <option selected value="@Category.Others">Click to select a category</option>
+                    @foreach (var item in Enum.GetValues(typeof(Category)))
+                    {
+                        <option value="@item">@item</option>
+                    }
+                </select>
+            </div>
+
+            <div class="form-group text-center">
+                <input type="submit" value="Create" class="btn btn-primary" /> |
+                <a asp-page="/Index" class="btn-link">Back to Home</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        //To show the name of the file that is uploaded
+        document.querySelector("#file-upload").onchange = function () {
+            document.querySelector("#file-name").textContent = this.files[0].name;
+        }
+    </script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

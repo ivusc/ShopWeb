@@ -1,0 +1,139 @@
+﻿@page
+@model ShopWeb.Pages.ShopCart.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+@if (Model.Message != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>@Model.Message</strong>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+             class="bi bi-x-lg" viewBox="0 0 16 16" data-dismiss="alert" style="float:right" cursor="pointer">
+            <path d="M1.293 1.293a1 1 0 0 1 1.414 0L8 6.586l5.293-5.293a1 1 0 1 1 1.414 1.414L9.414 8l5.293 5.293a1 1 0 0 1-1.414 1.414L8 9.414l-5.293 5.293a1 1 0 0 1-1.414-1.414L6.586 8 1.293 2.707a1 1 0 0 1 0-1.414z" />
+        </svg>
+    </div>
+}
+
+<h1 align="center">Shopping Cart</h1>
+
+<!--display cart items if not paid-->
+@if (Model.PaymentMethod == null)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Photo
+                </th>
+                <th>
+                    Product Name
+                </th>
+                <th>
+                    Quantity
+                </th>
+                <th>
+                    Date Bought
+                </th>
+                <th>
+                    Remove
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.Cart.Count; i++)
+            {
+                <tr>
+                    <td>
+                        <img src="@("~/Images/" + (Model.PhotoPath[i] ?? "bag.png"))" style="width:50px; height:50px;" asp-append-version="true">
+                    </td>
+                    <td>
+                        @Model.Cart[i].ProductName
+                    </td>
+                    <td>
+                        @Model.Cart[i].QuantityBought
+                    </td>
+                    <td>
+                        @Model.Cart[i].DateTimeBought
+                    </td>
+                    <td>
+                        <a asp-page="./Delete" class="btn btn-danger" asp-route-id="@Model.Cart[i].ID">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                                <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z" />
+                            </svg>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+@if (Model.Cart.Count == 0)
+{
+    <p>You have nothing in your cart.</p>
+}
+<!--Modal trigger button-->
+<div class="container col-8 text-center">
+    @if (Model.Cart.Count > 0)
+    {
+        <h5 class="text-center">Total price: $ @Model.TotalPrice.ToString("0.00")</h5>
+        @if (Model.PaymentMethod == null)
+        {
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#cartModal">
+                Check Out
+            </button>
+        }
+    }
+    <a class="btn btn-primary" asp-page="/Index">Continue shopping</a>
+</div>
+<br />
+
+<!-- Modal -->
+<form method="post">
+    <div class="modal fade" id="cartModal" tabindex="-1" data-backdrop="static" data-keyboard="false" aria-labelledby="cartModal" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cartModal">Check out?</h5>
+                    <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                            <path d="M1.293 1.293a1 1 0 0 1 1.414 0L8 6.586l5.293-5.293a1 1 0 1 1 1.414 1.414L9.414 8l5.293 5.293a1 1 0 0 1-1.414 1.414L8 9.414l-5.293 5.293a1 1 0 0 1-1.414-1.414L6.586 8 1.293 2.707a1 1 0 0 1 0-1.414z" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container form-check">
+                        Select payment method: <br />
+                        <input class="form-check-input" type="radio" asp-for="PaymentMethod" value="Cash" checked>
+                        <label class="form-check-label" for="Cash">
+                            Cash
+                        </label><br />
+
+                        <input class="form-check-input" type="radio" asp-for="PaymentMethod" value="Nets">
+                        <label class="form-check-label" for="Nets">
+                            Nets
+                        </label><br />
+
+                        <input class="form-check-input" type="radio" asp-for="PaymentMethod" value="PayLah">
+                        <label class="form-check-label" for="PayLah">
+                            PayLah
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <input type="submit" class="btn btn-primary" value="Check Out" />
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@if (Model.PaymentMethod != null)
+{
+    <div class="container col-8 text-lg-center">
+        <p>You have paid with @(Model.PaymentMethod).<br />
+        <p>Please wait for your items to arrive. Thank you for shopping here.</p>
+    </div>
+}

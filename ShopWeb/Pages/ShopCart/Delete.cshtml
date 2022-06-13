@@ -1,0 +1,40 @@
+﻿@page
+@model ShopWeb.Pages.ShopCart.DeleteModel
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<div class="container col-6 text-center">
+    <h1>@Model.Cart.ProductName</h1>
+    <h5>Remove from Cart?</h5>
+    @{string Photopath = "~/Images/" + (Model.Product.Photopath ?? "bag.png");}
+    <img src="@Photopath" class="rounded mx-auto d-block" style="width:200px;height:200px;" asp-append-version="true">
+    <br /><br />
+    <table class="table-bordered" align="center">
+        <thead>
+            <tr>
+                <th class="table-primary col-md-4">Name</th>
+                <td class="col-md-8">@Model.Cart.ProductName</td>
+            </tr>
+            <tr>
+                <th class="table-primary col-md-4">Quantity Bought</th>
+                <td class="col-md-8">@Model.Cart.QuantityBought</td>
+            </tr>
+            <tr>
+                <th class="table-primary col-md-4">Price</th>
+                <td class="col-md-8">$@Model.Product.Price</td>
+            </tr>
+            <tr>
+                <th class="table-primary col-md-4">DateTime Bought</th>
+                <td class="col-md-8">@Model.Cart.DateTimeBought</td>
+            </tr>
+        </thead>
+    </table>
+    <br />
+    <form method="post">
+        <input type="hidden" asp-for="Cart.ID" />
+        <input type="submit" value="Remove" class="btn btn-danger" /> |
+        <a asp-page="/Index" class="btn btn-primary">Home</a>
+    </form>
+</div>

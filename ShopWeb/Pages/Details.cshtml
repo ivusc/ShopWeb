@@ -1,0 +1,45 @@
+﻿@page
+@model ShopWeb.Pages.DetailsModel
+@{
+}
+
+<div class="container col-6 text-center">
+    <h1>@Model.Product.Name</h1>
+    <h5>Product Details</h5>
+    @{string Photopath = "~/Images/" + (Model.Product.Photopath ?? "bag.png");}
+    <img src="@Photopath" class="rounded mx-auto d-block" asp-append-version="true">
+    <br /><br />
+    <table class="table-bordered" align="center">
+        <thead>
+            <tr>
+                <th class="table-primary col-md-4">Name</th>
+                <td class="col-md-8">@Model.Product.Name</td>
+            </tr>
+            <tr>
+                <th class="table-primary col-md-4">Price</th>
+                <td class="col-md-8">$@Model.Product.Price</td>
+            </tr>
+            <tr>
+                <th class="table-primary col-md-4">Stock</th>
+                <td class="col-md-8">@Model.Product.StockQuantity</td>
+            </tr>
+            <tr>
+                <th class="table-primary col-md-4">Category</th>
+                <td class="col-md-8">@Model.Product.CategoryID</td>
+            </tr>
+        </thead>
+    </table>
+    <br />
+    <a asp-page="Index" class="btn btn-primary">Home</a> |
+    <a asp-page="/ShopCart/AddToCart" class="btn btn-info" asp-route-Id="@Model.Product.ProductID">Add To Cart</a>
+</div>
+
+<style>
+    img{
+        width:20em;
+        height:20em;
+    }
+    table,th,td{
+        border: 1px;
+    }
+</style>
