@@ -46,6 +46,39 @@ namespace ShopWeb
 
             services.AddDbContext<ShopWebContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("ShopWebContext")));
+
+            services.AddDbContext<DbContext>(x =>
+            {
+
+                var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+                string connStr;
+
+                if (env == "Development")
+                {
+                    connStr = Configuration.GetConnectionString("ShopWebContext");
+
+                    x.UseSqlServer(Configuration.GetConnectionString("ShopWebContext"));
+                }
+                else
+                {
+                    // Use connection string provided at runtime by Heroku.
+                    var connUrl = Environment.GetEnvironmentVariable("CLEARDB_DATABASE_URL");
+
+                    connUrl = connUrl.Replace("mysql://", string.Empty);
+                    var userPassSide = connUrl.Split("@")[0];
+                    var hostSide = connUrl.Split("@")[1];
+
+                    var connUser = userPassSide.Split(":")[0];
+                    var connPass = userPassSide.Split(":")[1];
+                    var connHost = hostSide.Split("/")[0];
+                    var connDb = hostSide.Split("/")[1].Split("?")[0];
+
+
+                    connStr = $"server={connHost};Uid={connUser};Pwd={connPass};Database={connDb}";
+                    x.UseMySQL(connStr);
+                }
+
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
